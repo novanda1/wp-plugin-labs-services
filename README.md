@@ -1,13 +1,38 @@
 # wp-plugin-labs-services
+
 magic plugin to fix common issue wordpress
 
-### Features
-##### Elementor Accessibility
-- Accordion - add aria-label
+## Features
 
+### Elementor Accessibility
 
+#### HOOK
 
-------------
+###### Issues
 
+- An element with a role that hides child elements contains focusable child elements.
+  WCAG 2.0 A 1.3.1 Section 508 (2017) A 1.3.1 ARIA 1.1 Presentational Children 3 pages
+  This role element marks child elements as presentational, which hides them from the accessibility tree, but some of these children are focusable,
+  so they can be navigated to, but are not voiced in a screen reader.
+
+###### Solved
+
+- Accordion
+- Tabs
+- Toggle
+
+#### JS
+
+###### Issues
+
+- An element with aria-hidden=true contains focusable content.  
+  The hidden element and its contents are not voiced by a screen reader, but the contents contain an element with tabindex set or active a, button, input, select and textarea controls. The user can tab to these or focus via touch and hears only silence.
+
+##### Solved
+
+- Nav Menu
+- Anchor
+
+---
 
 > on development
