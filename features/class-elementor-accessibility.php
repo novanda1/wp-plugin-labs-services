@@ -47,6 +47,36 @@ class Labs_Services_Elementor_Accessibility
         return implode('.', [$repeater_key, $repeater_item_index, $setting_key]);
     }
 
+    /**
+     * Get widget settings for all widget
+     * 
+     * @since 1.0.0
+     * @access protected
+     * 
+     * @param object $widget
+     * 
+     * @return array the widget settings 
+     */
+    protected function get_widget_setting($widget)
+    {
+        return $widget->get_settings();
+    }
+
+    /**
+     * Get title for 
+     * Accordion, Tabs, and Toggle
+     * 
+     * @since 1.0.0
+     * @access protected
+     * 
+     * @param array Settings of the widget
+     * @param int Index
+     */
+    protected function get_accordion_title($settings, $index)
+    {
+        return $settings['tabs'][$index]['tab_title'];
+    }
+
 
     /**
      * This function 
@@ -56,38 +86,31 @@ class Labs_Services_Elementor_Accessibility
      */
     public function before_render_content($widget)
     {
-
-        if ('accordion' === $widget->get_name()) {
-            /**
-             * handle Accordion Widget
-             * 
-             * ISSUE -> 
-             * This role element marks child elements as presentational, 
-             * which hides them from the accessibility tree, but some of these children are focusable, 
-             * so they can be navigated to, but are not voiced in a screen reader.
-             * 
-             * SOLUTION ->
-             * add aria-label in role="tab" to presentation 
-             * what this tab according tab title, to voiced in a screen reader
-             */
-            $settings = $widget->get_settings();
-
-            function get_accordion_title($settings, $index)
-            {
-                return $settings['tabs'][$index]['tab_title'];
-            }
-
-            foreach ($settings['tabs'] as $index => $item) :
-                $tab_title_setting_key = $this->get_repeater_setting_key('tab_title', 'tabs', $index);
+        switch ($widget->get_name()):
+            case 'accordion':
+            case 'tabs':
+            case 'toggle':
 
                 /**
-                 * add aria label to role="tab"
+                 * An element with a role that hides child elements contains focusable child elements.	
+                 * 
+                 * WCAG 2.0 A 1.3.1 Section 508 (2017) A 1.3.1 ARIA 1.1 Presentational Children	3 pages
+                 * This role element marks child elements as presentational, 
+                 * which hides them from the accessibility tree, but some of these children are focusable, 
+                 * so they can be navigated to, but are not voiced in a screen reader.
                  */
-                $widget->add_render_attribute($tab_title_setting_key, [
-                    'aria-label' => get_accordion_title($settings, $index)
-                ]);
 
-            endforeach;
-        }
+                $settings = $this->get_widget_setting($widget);
+                foreach ($settings['tabs'] as $index => $item) :
+                    $tab_title_setting_key = $this->get_repeater_setting_key('tab_title', 'tabs', $index);
+                    $widget->add_render_attribute($tab_title_setting_key, [
+                        'aria-label' => $this->get_accordion_title($settings, $index)
+                    ]);
+
+                endforeach;
+
+            default:
+                return;
+        endswitch;
     }
 }
