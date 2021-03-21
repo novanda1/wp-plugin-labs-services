@@ -6,7 +6,7 @@ Just another Wordpress plugin
 
 ### Elementor Accessibility
 
-#### Issues
+**Issues**
 
 - An element with a role that hides child elements contains focusable child elements. This role element marks child elements as presentational, which hides them from the accessibility tree, but some of these children are focusable, so they can be navigated to, but are not voiced in a screen reader.
 
