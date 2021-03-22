@@ -83,7 +83,7 @@ elementReady("a").then((anchors) => {
           );
         else anchor.setAttribute("aria-label", "decorations link");
       else if (anchor.querySelector("span"))
-        anchor.querySelector("span").hasChildNodes() ? anchor.setAttribute('aria-label', 'unamed link') : anchor.setAttribute('aria-label', anchor.querySelector("span").innerHTML);
-      else anchor.hasChildNodes() ? anchor.setAttribute("aria-label", "unamed link") : anchor.setAttribute("aria-label", anchor.innerHTML);
+        anchor.querySelector("span").childElementCount ? anchor.setAttribute('aria-label', 'unamed link') : anchor.setAttribute('aria-label', anchor.querySelector("span").innerHTML);
+      else anchor.childElementCount ? anchor.setAttribute("aria-label", "unamed link") : anchor.setAttribute("aria-label", anchor.innerHTML);
   });
 });
