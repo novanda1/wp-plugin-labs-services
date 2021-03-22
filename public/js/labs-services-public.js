@@ -82,6 +82,8 @@ elementReady("a").then((anchors) => {
             anchor.querySelector("img").getAttribute("alt")
           );
         else anchor.setAttribute("aria-label", "decorations link");
-      else anchor.setAttribute("aria-label", anchor.innerHTML);
+      else if (anchor.querySelector("span"))
+        anchor.querySelector("span").hasChildNodes() ? anchor.setAttribute('aria-label', 'unamed link') : anchor.setAttribute('aria-label', anchor.querySelector("span").innerHTML);
+      else anchor.hasChildNodes() ? anchor.setAttribute("aria-label", "unamed link") : anchor.setAttribute("aria-label", anchor.innerHTML);
   });
 });
